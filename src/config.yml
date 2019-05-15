@@ -1,0 +1,85 @@
+
+base:
+  version                : 0.1.0
+# 全市场股票对照表(SH, SZ)
+  all_mkt_code           : ../csv/CODES.txt
+# tushare pro token
+  ts_token               : 2c7f8a125014cb1050c7d16ca13821c7e22edd2b5818c3e53059bb6d
+# 大盘指数代号(依序: 沪深300, 沪深300平权, 上证50)
+  mkt_index              :
+    - 399300.SZ
+    - 000984.SH
+    - 000016.SH
+# 指数包含的股票组成(沪深300, 上证50)
+  mkt_compose            :
+    - hist_hs300.csv
+    - hist_sh50.csv
+  industry               : ../csv/industry.csv
+  corp_name              : ../csv/fullname.csv
+
+path:
+# 每日行情数据源的文件路径(历史+最新)
+  daily_stock_dir        : ../csv/Basic_Data_a
+# 每日行情数据源的文件路径(最新)
+  daily_new_dir          : ../csv/New_Data_a
+# 每日 ola 数据源的文件路径
+  daily_ola_dir          : ../csv/mood_data/mood_daily
+# 计算全市场特徵的文件路径
+  daily_index_dir        : ../csv/index_data
+# 产出提供 RL 使用特徵的文件路径
+  daily_deliver_dir      : ../sample_data_a
+# 模型使用的文件路径
+  model_dir              : ../csv/model
+# 季度数据的文件路径
+  quarterly_dir          :
+    - raw_data/report
+    - raw_data/profit
+    - raw_data/operation
+    - raw_data/growth
+    - raw_data/debtpay
+    - raw_data/cashflow
+
+raw_update:
+ # 每日ola舆情文件路径
+  daily_ola              : 
+    - ../csv/mood_data/mood.csv
+    - ../csv/mood_data/mood_hist.csv
+ # 大盘指数文件名称(依序: 沪深300, 沪深300平权, 上证50)
+  daily_mkt              :
+    - ../a_return.csv    
+    - hs300_average.csv    
+    - sh50.csv           
+  batch_create_feature   : False
+  batch_start_dt         : '2014-01-02'
+
+dm_generate:
+  # 计算历史全市场交易量的文件路径
+  cal_amount             : amount.csv
+  # 计算个股历史 5 天波动的文件路径
+  cal_5d_vol             : volatility_5.csv  
+  # 计算个股历史 22 天波动的文件路径
+  cal_22d_vol            : volatility_22.csv
+  # 计算个股股价历史波动变化的文件路径
+  cal_vol_change         : mkt_volatility_change.csv
+  # 有问题的股票代码
+  error_log              : error_code.csv
+  # 停牌的股票代码
+  zero_log               : zero_code.csv
+  # 基本面五张表合并
+  generate_dm_basic_5    : dm_basic_5.csv
+  # 特徵产生
+  generate_total_feats   : features_total.pkl
+
+select_stocks:
+  # 股票池风格
+  strategy_name:
+    - alpha_hs300
+    - alpha_sh50
+  # 选股模型成效与上涨概率的文件路径
+  performance            : performance_hist.csv 
+  # 选股模型用的排除黑名单
+  blacklist              : blacklist.csv
+  # 产出目标股票池的文件路径
+  result_for_RL          : ../codelist_info.csv
+  # 同上,仅备份
+  result_for_RL_backup   : codelist_info_hist.csv
